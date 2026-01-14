@@ -2,6 +2,7 @@ package tmpsandbox.microarch.ddd.delivery.core.domain.model.courier;
 
 
 import org.junit.jupiter.api.Test;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 
@@ -41,7 +42,7 @@ class StoragePlaceTest {
                 () -> assertThat(storagePlace.getName()).isEqualTo(BACKPACK),
                 () -> assertThat(storagePlace.getTotalVolume()).isEqualTo(BACKPACK_CAPACITY),
                 () -> assertThat(storagePlace.getStatus()).isEqualTo(Status.BUSY),
-                () -> assertThat(storagePlace.getOrderId()).isEqualTo(orderId)
+                () -> assertThat(storagePlace.clear()).isEqualTo(orderId)
         );
     }
 
@@ -81,32 +82,20 @@ class StoragePlaceTest {
         var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY, expectedOrderId).getValue();
 
         // When:
-        UUID orderId = storagePlace.getOrderId();
+        UUID orderId = storagePlace.clear();
 
         // Then:
         assertAll(
                 () -> assertThat(orderId).isEqualTo(expectedOrderId),
                 () -> assertThat(storagePlace.getStatus()).isEqualTo(Status.EMPTY),
-                () -> assertThat(storagePlace.getOrderId()).isNull()
+                () -> assertThat(storagePlace.clear()).isNull()
         );
     }
 
     @Test
-    public void shouldReturnTrue_whenStoreIsEmpty() {
+    public void shouldReturnFalse_whenStoreIsEmpty() {
         // Given:
         var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY).getValue();
-
-        // When:
-        boolean isOccupied = storagePlace.isOccupied();
-
-        // Then:
-        assertThat(isOccupied).isTrue();
-    }
-
-    @Test
-    public void shouldReturnFalse_whenStoreIsBusy() {
-        // Given:
-        var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY, UUID.randomUUID()).getValue();
 
         // When:
         boolean isOccupied = storagePlace.isOccupied();
@@ -116,23 +105,35 @@ class StoragePlaceTest {
     }
 
     @Test
+    public void shouldReturnTrue_whenStoreIsBusy() {
+        // Given:
+        var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY, UUID.randomUUID()).getValue();
+
+        // When:
+        boolean isOccupied = storagePlace.isOccupied();
+
+        // Then:
+        assertThat(isOccupied).isTrue();
+    }
+
+    @Test
     public void shouldStoreOrder_whenCallStore() {
         // Given:
         var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY).getValue();
-        var order = Order.create(BACKPACK_CAPACITY).getValue();
+        var order = Order.create(UUID.randomUUID(), Location.create(1, 1).getValue(), BACKPACK_CAPACITY).getValue();
 
         // When
         storagePlace.storeOrder(order);
 
         // Then:
-        assertThat(storagePlace.getOrderId()).isEqualTo(order.getId());
+        assertThat(storagePlace.clear()).isEqualTo(order.getId());
     }
 
     @Test
     public void shouldNotStoreOrder_whenStoreBusy() {
         // Given:
         var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY, UUID.randomUUID()).getValue();
-        var order = Order.create(BACKPACK_CAPACITY).getValue();
+        var order = Order.create(UUID.randomUUID(), Location.create(1, 1).getValue(), BACKPACK_CAPACITY).getValue();
 
         // When, Then:
         assertThatThrownBy(() -> storagePlace.storeOrder(order))
@@ -144,7 +145,7 @@ class StoragePlaceTest {
     public void shouldNotStoreOrder_whenStoreLess() {
         // Given:
         var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY).getValue();
-        var order = Order.create(Volume.create(2).getValue()).getValue();
+        var order = Order.create(UUID.randomUUID(), Location.create(1, 1).getValue(), Volume.create(2).getValue()).getValue();
 
         // When, Then:
         assertThatThrownBy(() -> storagePlace.storeOrder(order))
