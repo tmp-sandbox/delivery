@@ -10,19 +10,15 @@ import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 
 import java.util.UUID;
+import libs.errs.Error;
 
 
+@Getter
 @NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 public class StoragePlace extends BaseEntity<UUID> {
-    @Getter
     private Name name;
-
-    @Getter
     private Volume totalVolume;
-
     private UUID orderId;
-
-    @Getter
     private Status status;
 
     private StoragePlace(Name name, Volume totalVolume) {
@@ -56,7 +52,7 @@ public class StoragePlace extends BaseEntity<UUID> {
         return Result.success(new StoragePlace(name, totalVolume, orderId));
     }
 
-    public UUID getOrderId() {
+    public UUID clear() {
         UUID orderId = this.orderId;
 
         this.orderId = null;
@@ -66,7 +62,7 @@ public class StoragePlace extends BaseEntity<UUID> {
     }
 
     public boolean isOccupied() {
-        return status == Status.EMPTY;
+        return status != Status.EMPTY;
     }
 
     public void storeOrder(Order order) {
