@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Name;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Speed;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Location;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Volume;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 
 import java.util.UUID;
 

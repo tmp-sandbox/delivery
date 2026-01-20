@@ -8,8 +8,8 @@ import libs.errs.UnitResult;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Location;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Volume;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 
 import java.util.ArrayList;

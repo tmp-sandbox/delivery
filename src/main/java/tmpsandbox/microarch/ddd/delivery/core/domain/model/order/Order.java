@@ -8,8 +8,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Location;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Volume;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 
 import java.util.UUID;
 

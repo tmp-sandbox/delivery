@@ -6,7 +6,7 @@ import libs.errs.Result;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Volume;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 
 import java.util.UUID;

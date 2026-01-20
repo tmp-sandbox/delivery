@@ -2,8 +2,8 @@ package tmpsandbox.microarch.ddd.delivery.core.domain.model.courier;
 
 
 import org.junit.jupiter.api.Test;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Location;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Volume;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 
 import java.util.UUID;
