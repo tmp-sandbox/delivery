@@ -1,13 +1,10 @@
 package tmpsandbox.microarch.ddd.delivery.core.domain.model.courier;
 
 
-import libs.errs.Error;
-import libs.errs.UnitResult;
-import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Location;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Volume;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 
 import java.util.UUID;

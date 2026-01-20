@@ -1,4 +1,4 @@
-package tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel;
+package tmpsandbox.microarch.ddd.delivery.core.domain.model.common;
 
 import libs.ddd.ValueObject;
 import libs.errs.Err;
