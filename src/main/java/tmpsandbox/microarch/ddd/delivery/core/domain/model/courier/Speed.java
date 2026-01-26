@@ -1,23 +1,26 @@
 package tmpsandbox.microarch.ddd.delivery.core.domain.model.courier;
 
+import jakarta.persistence.Embeddable;
 import libs.ddd.ValueObject;
 import libs.errs.Err;
 import libs.errs.Error;
 import libs.errs.Result;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Embeddable
 @Getter
-public final class Speed extends ValueObject<Speed> {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class Speed extends ValueObject<Speed> {
     private static final int MIN_VALUE = 1;
     private static final int MAX_VALUE = 9;
 
-    private final int value;
-
-    private Speed(int value) {
-        this.value = value;
-    }
+    private int value;
 
     public static Result<Speed, Error> create(int value) {
         var validation = Err.againstOutOfRange(value, MIN_VALUE, MAX_VALUE, "speed");

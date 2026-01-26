@@ -1,24 +1,49 @@
 package tmpsandbox.microarch.ddd.delivery.core.domain.model.courier;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import libs.ddd.BaseEntity;
+import libs.errs.Error;
 import libs.errs.Except;
 import libs.errs.Result;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 
 import java.util.UUID;
-import libs.errs.Error;
 
-
+@Entity
+@Table(name = "storage_places")
 @Getter
 @NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 public class StoragePlace extends BaseEntity<UUID> {
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "name"))
     private Name name;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "total_volume"))
     private Volume totalVolume;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "courier_id")
+    @Setter
+    private Courier courier;
+
     private UUID orderId;
+
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     private StoragePlace(Name name, Volume totalVolume) {
@@ -35,7 +60,6 @@ public class StoragePlace extends BaseEntity<UUID> {
         this.orderId = orderId;
         this.status = Status.BUSY;
     }
-
 
     public static Result<StoragePlace, Error> create(Name name, Volume totalVolume) {
         Except.againstNull(name, "name");

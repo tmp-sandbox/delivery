@@ -1,5 +1,12 @@
 package tmpsandbox.microarch.ddd.delivery.core.domain.model.courier;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import libs.ddd.Aggregate;
 import libs.errs.Error;
 import libs.errs.Except;
@@ -17,18 +24,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Entity
+@Table(name = "couriers")
 @NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 @Getter
 public class Courier extends Aggregate<UUID> {
     private static final Name BAG = Name.create("Сумка").getValue();
     private static final Volume BAG_CAPACITY = Volume.create(10).getValue();
 
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "name"))
     private final Name name;
 
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "speed"))
     private final Speed speed;
 
+    @Embedded
     private Location location;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "courier")
     private final List<StoragePlace> storagePlaces = new ArrayList<>();
 
     private Courier(Name name, Speed speed, Location location) {
@@ -36,7 +51,14 @@ public class Courier extends Aggregate<UUID> {
         this.name = name;
         this.speed = speed;
         this.location = location;
-        storagePlaces.add(StoragePlace.create(BAG, BAG_CAPACITY).getValue());
+        setDefaultStoragePlace();
+    }
+
+    private void setDefaultStoragePlace() {
+        StoragePlace storagePlace = StoragePlace.create(BAG, BAG_CAPACITY).getValue();
+        storagePlace.setCourier(this);
+
+        storagePlaces.add(storagePlace);
     }
 
     public static Result<Courier, Error> create(Name name, Speed speed, Location location) {
@@ -44,7 +66,8 @@ public class Courier extends Aggregate<UUID> {
         Except.againstNull(speed, "speed");
         Except.againstNull(location, "location");
 
-        return Result.success(new Courier(name, speed, location));
+        Courier courier = new Courier(name, speed, location);
+        return Result.success(courier);
     }
 
     public UnitResult<Error> addStoragePlace(String name, int volume) {
