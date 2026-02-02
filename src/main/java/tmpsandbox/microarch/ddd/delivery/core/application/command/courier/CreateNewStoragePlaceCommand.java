@@ -2,7 +2,7 @@ package tmpsandbox.microarch.ddd.delivery.core.application.command.courier;
 
 import java.util.UUID;
 
-public record CreateNewStoragePlace(
+public record CreateNewStoragePlaceCommand(
     UUID courierId,
     String name,
     int totalVolume

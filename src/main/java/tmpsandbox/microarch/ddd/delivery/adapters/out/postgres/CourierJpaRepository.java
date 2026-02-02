@@ -26,4 +26,20 @@ public interface CourierJpaRepository extends JpaRepository<Courier, UUID> {
         )
         """)
     List<Courier> findFree();
+
+    @Query("""
+        SELECT c
+        FROM Courier c
+        WHERE EXISTS (
+            SELECT 1
+            FROM StoragePlace sp
+            WHERE sp.courier = c
+        )
+        AND EXISTS (
+            SELECT 1
+            FROM StoragePlace sp
+            WHERE sp.courier = c AND sp.status = tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Status.BUSY
+        )
+        """)
+    List<Courier> findBusy();
 }

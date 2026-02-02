@@ -7,8 +7,10 @@ import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Status;
 import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
@@ -33,5 +35,14 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<Order> findAllAssigned() {
         return orderJpaRepository.findAllByStatus(Status.ASSIGNED);
+    }
+
+    @Override
+    public Map<UUID, Order> findAllByIds(List<UUID> ids) {
+        return orderJpaRepository.findAllById(ids).stream()
+            .collect(Collectors.toMap(
+                Order::getId,
+                o -> o
+            ));
     }
 }

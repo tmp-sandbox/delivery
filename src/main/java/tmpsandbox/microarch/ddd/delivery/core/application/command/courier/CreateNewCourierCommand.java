@@ -1,6 +1,6 @@
 package tmpsandbox.microarch.ddd.delivery.core.application.command.courier;
 
-public record CreateNewCourier(
+public record CreateNewCourierCommand(
     String name,
     int speed
 ) {

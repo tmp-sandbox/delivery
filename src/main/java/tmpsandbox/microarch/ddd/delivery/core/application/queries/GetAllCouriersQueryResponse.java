@@ -1,6 +1,10 @@
 package tmpsandbox.microarch.ddd.delivery.core.application.queries;
 
-public record GetAllCouriersResponse(
-    
+import java.util.UUID;
+
+public record GetAllCouriersQueryResponse(
+    UUID id,
+    String name,
+    String location
 ) {
 }

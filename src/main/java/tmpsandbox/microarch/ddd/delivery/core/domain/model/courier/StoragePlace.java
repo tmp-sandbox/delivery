@@ -61,11 +61,27 @@ public class StoragePlace extends BaseEntity<UUID> {
         this.status = Status.BUSY;
     }
 
+    private StoragePlace(Name name, Volume totalVolume, Courier courier) {
+        super(UUID.randomUUID());
+        this.name = name;
+        this.totalVolume = totalVolume;
+        this.courier = courier;
+        this.status = Status.BUSY;
+    }
+
     public static Result<StoragePlace, Error> create(Name name, Volume totalVolume) {
         Except.againstNull(name, "name");
         Except.againstNull(totalVolume, "totalVolume");
 
         return Result.success(new StoragePlace(name, totalVolume));
+    }
+
+    public static Result<StoragePlace, Error> create(Name name, Volume totalVolume, Courier courier) {
+        Except.againstNull(name, "name");
+        Except.againstNull(totalVolume, "totalVolume");
+        Except.againstNull(courier, "courier");
+
+        return Result.success(new StoragePlace(name, totalVolume, courier));
     }
 
     public static Result<StoragePlace, Error> create(Name name, Volume totalVolume, UUID orderId) {

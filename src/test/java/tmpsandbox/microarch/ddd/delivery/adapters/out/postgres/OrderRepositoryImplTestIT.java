@@ -15,6 +15,7 @@ import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Status;
 import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -129,5 +130,31 @@ class OrderRepositoryImplTestIT extends BaseIT {
         assertThat(allAssigned)
             .extracting(BaseEntity::getId)
             .containsExactlyInAnyOrder(orderFirst.getId(), orderSecond.getId());
+    }
+
+    @Test
+    void shouldReturnOrdersByIds_whenCallFindByIds() {
+        // Given:
+        UUID orderId2 = UUID.randomUUID();
+        UUID orderId4 = UUID.randomUUID();
+        UUID orderId5 = UUID.randomUUID();
+
+        var order1 = Order.create(UUID.randomUUID(), START_LOCATION, BACKPACK_CAPACITY).getValue();
+        var order2 = Order.create(orderId2, START_LOCATION, BACKPACK_CAPACITY).getValue();
+        var order3 = Order.create(UUID.randomUUID(), START_LOCATION, BACKPACK_CAPACITY).getValue();
+        var order4 = Order.create(orderId4, START_LOCATION, BACKPACK_CAPACITY).getValue();
+        var order5 = Order.create(orderId5, START_LOCATION, BACKPACK_CAPACITY).getValue();
+
+        orderRepositoryImpl.save(order1);
+        orderRepositoryImpl.save(order2);
+        orderRepositoryImpl.save(order3);
+        orderRepositoryImpl.save(order4);
+        orderRepositoryImpl.save(order5);
+
+        // When:
+        Map<UUID, Order> allByIds = orderRepositoryImpl.findAllByIds(List.of(orderId2, orderId4, orderId5));
+
+        // Then:
+        assertThat(allByIds.keySet()).containsExactlyInAnyOrder(orderId2, orderId4, orderId5);
     }
 }

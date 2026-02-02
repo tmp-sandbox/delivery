@@ -28,4 +28,9 @@ public class CourierRepositoryImpl implements CourierRepository {
     public List<Courier> findFree() {
         return courierJpaRepository.findFree();
     }
+
+    @Override
+    public List<Courier> findBusy() {
+        return courierJpaRepository.findBusy();
+    }
 }
