@@ -25,7 +25,7 @@ class StoragePlaceTest {
         assertAll(
                 () -> assertThat(storagePlace.getName()).isEqualTo(BACKPACK),
                 () -> assertThat(storagePlace.getTotalVolume()).isEqualTo(BACKPACK_CAPACITY),
-                () -> assertThat(storagePlace.getStatus()).isEqualTo(Status.EMPTY)
+                () -> assertThat(storagePlace.getStatus()).isEqualTo(CourierStatus.EMPTY)
         );
     }
 
@@ -41,7 +41,7 @@ class StoragePlaceTest {
         assertAll(
                 () -> assertThat(storagePlace.getName()).isEqualTo(BACKPACK),
                 () -> assertThat(storagePlace.getTotalVolume()).isEqualTo(BACKPACK_CAPACITY),
-                () -> assertThat(storagePlace.getStatus()).isEqualTo(Status.BUSY),
+                () -> assertThat(storagePlace.getStatus()).isEqualTo(CourierStatus.BUSY),
                 () -> assertThat(storagePlace.clear()).isEqualTo(orderId)
         );
     }
@@ -87,7 +87,7 @@ class StoragePlaceTest {
         // Then:
         assertAll(
                 () -> assertThat(orderId).isEqualTo(expectedOrderId),
-                () -> assertThat(storagePlace.getStatus()).isEqualTo(Status.EMPTY),
+                () -> assertThat(storagePlace.getStatus()).isEqualTo(CourierStatus.EMPTY),
                 () -> assertThat(storagePlace.clear()).isNull()
         );
     }

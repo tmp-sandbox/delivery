@@ -44,13 +44,13 @@ public class StoragePlace extends BaseEntity<UUID> {
     private UUID orderId;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private CourierStatus status;
 
     private StoragePlace(Name name, Volume totalVolume) {
         super(UUID.randomUUID());
         this.name = name;
         this.totalVolume = totalVolume;
-        this.status = Status.EMPTY;
+        this.status = CourierStatus.EMPTY;
     }
 
     private StoragePlace(Name name, Volume totalVolume, UUID orderId) {
@@ -58,7 +58,7 @@ public class StoragePlace extends BaseEntity<UUID> {
         this.name = name;
         this.totalVolume = totalVolume;
         this.orderId = orderId;
-        this.status = Status.BUSY;
+        this.status = CourierStatus.BUSY;
     }
 
     private StoragePlace(Name name, Volume totalVolume, Courier courier) {
@@ -66,7 +66,7 @@ public class StoragePlace extends BaseEntity<UUID> {
         this.name = name;
         this.totalVolume = totalVolume;
         this.courier = courier;
-        this.status = Status.BUSY;
+        this.status = CourierStatus.BUSY;
     }
 
     public static Result<StoragePlace, Error> create(Name name, Volume totalVolume) {
@@ -96,17 +96,17 @@ public class StoragePlace extends BaseEntity<UUID> {
         UUID orderId = this.orderId;
 
         this.orderId = null;
-        status = Status.EMPTY;
+        status = CourierStatus.EMPTY;
 
         return orderId;
     }
 
     public boolean isOccupied() {
-        return status != Status.EMPTY;
+        return status != CourierStatus.EMPTY;
     }
 
     public void storeOrder(Order order) {
-        if (status == Status.BUSY) {
+        if (status == CourierStatus.BUSY) {
             throw new IllegalStateException("Cannot store order while the storage place is busy");
         }
 
@@ -115,6 +115,6 @@ public class StoragePlace extends BaseEntity<UUID> {
         }
 
         orderId = order.getId();
-        status = Status.BUSY;
+        status = CourierStatus.BUSY;
     }
 }

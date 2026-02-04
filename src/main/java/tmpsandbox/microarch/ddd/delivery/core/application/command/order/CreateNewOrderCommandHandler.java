@@ -9,6 +9,8 @@ import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
 
+import java.util.UUID;
+
 /*
 Создать заказ
 Сервис Delivery создает заказ в результате оформления корзины
@@ -27,15 +29,15 @@ import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
 public class CreateNewOrderCommandHandler {
     private final OrderRepository orderRepository;
 
-    public UnitResult<Error> handle(CreateNewOrderCommand createNewOrderCommand) {
+    public Result<UUID, Error> handle(CreateNewOrderCommand createNewOrderCommand) {
         var location = Location.create(1, 1).getValue();
 
         Result<Order, Error> orderResult = Order.create(createNewOrderCommand.orderId(), location, Volume.create(createNewOrderCommand.volume()).getValue());
         if (orderResult.isFailure()) {
-            return UnitResult.failure(orderResult.getError());
+            return Result.failure(orderResult.getError());
         }
 
         orderRepository.save(orderResult.getValue());
-        return UnitResult.success();
+        return Result.success(orderResult.getValue().getId());
     }
 }

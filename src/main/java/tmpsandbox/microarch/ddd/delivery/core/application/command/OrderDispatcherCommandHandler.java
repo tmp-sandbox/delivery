@@ -30,7 +30,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class AssignOrderToCourierCommandHandler {
+public class OrderDispatcherCommandHandler {
     private final OrderDispatcher orderDispatcher;
     private final CourierRepository courierRepository;
     private final OrderRepository orderRepository;
@@ -41,6 +41,11 @@ public class AssignOrderToCourierCommandHandler {
         Optional<Order> unassignedOrder = orderRepository.findByStatusCreated();
 
         if (unassignedOrder.isEmpty()) {
+            log.info("Not found free orders");
+            return UnitResult.success();
+        }
+
+        if (freeCouriers.isEmpty()) {
             return UnitResult.failure(Error.of("orderByStatusCreated", "Cant find a free order for the courier"));
         }
 

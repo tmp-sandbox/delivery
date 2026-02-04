@@ -22,7 +22,7 @@ public interface CourierJpaRepository extends JpaRepository<Courier, UUID> {
         AND NOT EXISTS (
             SELECT 1
             FROM StoragePlace sp
-            WHERE sp.courier = c AND sp.status <> tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Status.EMPTY
+            WHERE sp.courier = c AND sp.status <> tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.CourierStatus.EMPTY
         )
         """)
     List<Courier> findFree();
@@ -38,7 +38,7 @@ public interface CourierJpaRepository extends JpaRepository<Courier, UUID> {
         AND EXISTS (
             SELECT 1
             FROM StoragePlace sp
-            WHERE sp.courier = c AND sp.status = tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Status.BUSY
+            WHERE sp.courier = c AND sp.status = tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.CourierStatus.BUSY
         )
         """)
     List<Courier> findBusy();

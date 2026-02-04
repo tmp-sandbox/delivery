@@ -36,7 +36,8 @@ class GetAllCouriersQueryHandlerTestIT extends BaseIT {
             .map(c -> new GetAllCouriersQueryResponse(
                 c.getId(),
                 c.getName().getValue(),
-                "2,2"
+                "2",
+                "2"
             ))
             .toList();
 

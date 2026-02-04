@@ -34,7 +34,7 @@ public class Order extends Aggregate<UUID> {
     private Volume volume;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrderStatus status;
 
     private UUID courierId;
 
@@ -42,7 +42,7 @@ public class Order extends Aggregate<UUID> {
         super(id);
         this.volume = volume;
         this.location = location;
-        this.status = Status.CREATED;
+        this.status = OrderStatus.CREATED;
     }
 
     private Order(UUID id, Location location, Volume volume, UUID courierId) {
@@ -50,7 +50,7 @@ public class Order extends Aggregate<UUID> {
         this.volume = volume;
         this.location = location;
         this.courierId = courierId;
-        this.status = Status.CREATED;
+        this.status = OrderStatus.CREATED;
     }
 
     public static Result<Order, Error> create(UUID id, Location location, Volume volume) {
@@ -73,18 +73,18 @@ public class Order extends Aggregate<UUID> {
     public UnitResult<Error> assign(Courier courier) {
         Except.againstNull(courier, "courier");
 
-        status = Status.ASSIGNED;
+        status = OrderStatus.ASSIGNED;
         this.courierId = courier.getId();
 
         return UnitResult.success();
     }
 
     public UnitResult<Error> complete() {
-        if (status != Status.ASSIGNED) {
+        if (status != OrderStatus.ASSIGNED) {
             throw new IllegalStateException("You can only complete a previously assigned order");
         }
 
-        status = Status.COMPLETED;
+        status = OrderStatus.COMPLETED;
 
         return UnitResult.success();
     }
