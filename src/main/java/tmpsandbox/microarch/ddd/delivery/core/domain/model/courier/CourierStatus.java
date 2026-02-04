@@ -1,6 +1,6 @@
 package tmpsandbox.microarch.ddd.delivery.core.domain.model.courier;
 
-public enum Status {
+public enum CourierStatus {
     EMPTY,
     BUSY
 }

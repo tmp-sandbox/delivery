@@ -3,7 +3,7 @@ package tmpsandbox.microarch.ddd.delivery.adapters.out.postgres;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Status;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.OrderStatus;
 import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
 
 import java.util.List;
@@ -29,12 +29,12 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Optional<Order> findByStatusCreated() {
-        return orderJpaRepository.findFirstByStatus(Status.CREATED);
+        return orderJpaRepository.findFirstByStatus(OrderStatus.CREATED);
     }
 
     @Override
     public List<Order> findAllAssigned() {
-        return orderJpaRepository.findAllByStatus(Status.ASSIGNED);
+        return orderJpaRepository.findAllByStatus(OrderStatus.ASSIGNED);
     }
 
     @Override

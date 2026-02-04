@@ -29,7 +29,8 @@ public class GetAllCouriersQueryHandler {
             SELECT
                 id,
                 name,
-                CONCAT(x, ',', y) location
+                x, 
+                y
             FROM couriers
             """;
 

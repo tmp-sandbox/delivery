@@ -1,6 +1,7 @@
 package tmpsandbox.microarch.ddd.delivery.core.application.command.courier;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
@@ -25,12 +26,18 @@ import java.util.UUID;
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class MoveCourierCommandHandler {
     private final CourierRepository courierRepositoryImpl;
     private final OrderRepository orderRepositoryImpl;
 
-    public void handler() {
+    public void handle() {
         List<Courier> busyCouriers = courierRepositoryImpl.findBusy();
+
+        if (busyCouriers.isEmpty()) {
+            log.info("No busy couriers found");
+            return;
+        }
 
         List<UUID> orderIds = busyCouriers.stream()
             .map(Courier::getOrderId)
@@ -39,8 +46,13 @@ public class MoveCourierCommandHandler {
             .toList();
 
         Map<UUID, Order> ordersById = orderRepositoryImpl.findAllByIds(orderIds);
-        busyCouriers.forEach(courier -> courier.move(ordersById.get(courier.getOrderId().get()).getLocation()));
 
+        if (ordersById.isEmpty()) {
+            log.info("Not found orders");
+            return;
+        }
+
+        busyCouriers.forEach(courier -> courier.move(ordersById.get(courier.getOrderId().get()).getLocation()));
         busyCouriers.forEach(courierRepositoryImpl::save);
     }
 }

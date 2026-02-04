@@ -35,7 +35,7 @@ class GetAllUnfinishedOrdersQueryHandlerTestIT extends BaseIT {
 
         var expected = orders.stream()
             .map(
-                order -> new GetAllUnfinishedOrdersQueryResponse(order.getId(), "1,1")
+                order -> new GetAllUnfinishedOrdersQueryResponse(order.getId(), "1", "1")
             ).toList();
 
         orderJpaRepository.saveAll(orders);

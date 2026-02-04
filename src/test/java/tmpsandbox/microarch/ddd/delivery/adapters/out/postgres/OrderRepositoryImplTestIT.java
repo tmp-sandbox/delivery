@@ -11,7 +11,7 @@ import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Name;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Speed;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Status;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.OrderStatus;
 import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
 
 import java.util.List;
@@ -54,7 +54,7 @@ class OrderRepositoryImplTestIT extends BaseIT {
             () -> assertThat(orderSaved).isEqualTo(order),
             () -> assertThat(orderSaved.getLocation()).isEqualTo(START_LOCATION),
             () -> assertThat(orderSaved.getVolume()).isEqualTo(BACKPACK_CAPACITY),
-            () -> assertThat(orderSaved.getStatus()).isEqualTo(Status.CREATED)
+            () -> assertThat(orderSaved.getStatus()).isEqualTo(OrderStatus.CREATED)
         );
     }
 
@@ -73,7 +73,7 @@ class OrderRepositoryImplTestIT extends BaseIT {
             () -> assertThat(orderSaved).isEqualTo(order),
             () -> assertThat(orderSaved.getLocation()).isEqualTo(START_LOCATION),
             () -> assertThat(orderSaved.getVolume()).isEqualTo(BACKPACK_CAPACITY),
-            () -> assertThat(orderSaved.getStatus()).isEqualTo(Status.CREATED),
+            () -> assertThat(orderSaved.getStatus()).isEqualTo(OrderStatus.CREATED),
             () -> assertThat(orderSaved.getCourierId()).isEqualTo(courierId)
         );
     }
@@ -123,7 +123,7 @@ class OrderRepositoryImplTestIT extends BaseIT {
         assertThat(allAssigned)
             .hasSize(2)
             .allSatisfy(order -> assertAll(
-                () -> assertThat(order.getStatus()).isEqualTo(Status.ASSIGNED),
+                () -> assertThat(order.getStatus()).isEqualTo(OrderStatus.ASSIGNED),
                 () -> assertThat(order.getCourierId()).isEqualTo(courier.getId())
             ));
 

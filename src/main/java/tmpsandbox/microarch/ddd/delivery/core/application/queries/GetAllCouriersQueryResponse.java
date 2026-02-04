@@ -5,6 +5,7 @@ import java.util.UUID;
 public record GetAllCouriersQueryResponse(
     UUID id,
     String name,
-    String location
+    String x,
+    String y
 ) {
 }

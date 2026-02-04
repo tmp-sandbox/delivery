@@ -33,7 +33,7 @@ class OrderTest {
         // Then:
         assertAll(
                 () -> assertThat(order.getId()).isEqualTo(orderId),
-                () -> assertThat(order.getStatus()).isEqualTo(Status.CREATED),
+                () -> assertThat(order.getStatus()).isEqualTo(OrderStatus.CREATED),
                 () -> assertThat(order.getVolume()).isEqualTo(BACKPACK_CAPACITY),
                 () -> assertThat(order.getLocation()).isEqualTo(START_LOCATION)
         );
@@ -50,7 +50,7 @@ class OrderTest {
         // Then:
         assertAll(
                 () -> assertThat(order.getId()).isEqualTo(orderId),
-                () -> assertThat(order.getStatus()).isEqualTo(Status.CREATED),
+                () -> assertThat(order.getStatus()).isEqualTo(OrderStatus.CREATED),
                 () -> assertThat(order.getVolume()).isEqualTo(BACKPACK_CAPACITY),
                 () -> assertThat(order.getLocation()).isEqualTo(START_LOCATION),
                 () -> assertThat(order.getCourierId()).isEqualTo(courierId)
@@ -98,7 +98,7 @@ class OrderTest {
         order.complete();
 
         // Then:
-        assertThat(order.getStatus()).isEqualTo(Status.COMPLETED);
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
 
     @Test
@@ -138,7 +138,7 @@ class OrderTest {
 
         // Then:
         assertAll(
-                () -> assertThat(order.getStatus()).isEqualTo(Status.ASSIGNED),
+                () -> assertThat(order.getStatus()).isEqualTo(OrderStatus.ASSIGNED),
                 () -> assertThat(order.getCourierId()).isEqualTo(courier.getId())
 
         );

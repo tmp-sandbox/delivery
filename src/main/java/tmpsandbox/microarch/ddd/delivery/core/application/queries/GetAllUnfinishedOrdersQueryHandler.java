@@ -26,7 +26,8 @@ public class GetAllUnfinishedOrdersQueryHandler {
         String sql = """
             SELECT
                 id,
-                CONCAT(x, ',', y) location
+                x, 
+                y
             FROM orders
             """;
 

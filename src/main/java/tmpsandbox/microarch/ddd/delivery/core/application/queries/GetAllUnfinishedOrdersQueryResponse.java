@@ -4,6 +4,7 @@ import java.util.UUID;
 
 public record GetAllUnfinishedOrdersQueryResponse(
     UUID id,
-    String location
+    String x,
+    String y
 ) {
 }
