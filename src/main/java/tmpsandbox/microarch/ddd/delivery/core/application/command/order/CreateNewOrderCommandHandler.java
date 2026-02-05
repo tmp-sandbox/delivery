@@ -1,12 +1,14 @@
 package tmpsandbox.microarch.ddd.delivery.core.application.command.order;
 
+import libs.errs.Error;
 import libs.errs.Result;
-import libs.errs.UnitResult;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
+import tmpsandbox.microarch.ddd.delivery.core.ports.GeoClient;
 import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
 
 import java.util.UUID;
@@ -26,10 +28,21 @@ import java.util.UUID;
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CreateNewOrderCommandHandler {
     private final OrderRepository orderRepository;
+    private final GeoClient geoClient;
 
     public Result<UUID, Error> handle(CreateNewOrderCommand createNewOrderCommand) {
+        Result<Location, Error> locationResponse = geoClient.getLocation(createNewOrderCommand.street());
+
+        if (locationResponse.isFailure()) {
+            String error = String.format("Failed to get location for street %s", createNewOrderCommand.street());
+
+            log.error(error);
+            return Result.failure(Error.of("GeoClient", error));
+        }
+
         var location = Location.create(1, 1).getValue();
 
         Result<Order, Error> orderResult = Order.create(createNewOrderCommand.orderId(), location, Volume.create(createNewOrderCommand.volume()).getValue());

@@ -8,6 +8,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import libs.ddd.Aggregate;
+import libs.errs.Error;
 import libs.errs.Except;
 import libs.errs.Result;
 import libs.errs.UnitResult;

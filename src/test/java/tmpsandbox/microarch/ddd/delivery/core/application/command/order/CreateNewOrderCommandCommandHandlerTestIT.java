@@ -37,7 +37,8 @@ class CreateNewOrderCommandCommandHandlerTestIT extends BaseIT {
         assertAll(
             () -> assertThat(result.isFailure()).isFalse(),
             () -> assertThat(createdOrder).isNotNull(),
-            () -> assertThat(createdOrder.getVolume().getValue()).isEqualTo(5)
+            () -> assertThat(createdOrder.getVolume().getValue()).isEqualTo(5),
+            () -> assertThat(createdOrder.getLocation()).isNotNull()
         );
     }
 }
