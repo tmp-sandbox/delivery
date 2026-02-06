@@ -51,6 +51,8 @@ public class CreateNewOrderCommandHandler {
         }
 
         orderRepository.save(orderResult.getValue());
+
+        log.info("Created new order: {}", orderResult.getValue().getId());
         return Result.success(orderResult.getValue().getId());
     }
 }
