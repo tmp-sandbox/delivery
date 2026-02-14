@@ -1,4 +1,4 @@
-package tmpsandbox.microarch.ddd.delivery.core.application.queries;
+package tmpsandbox.microarch.ddd.delivery.core.application.query;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

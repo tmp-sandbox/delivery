@@ -3,7 +3,7 @@ package tmpsandbox.microarch.ddd.delivery.adapters.in.http.courier.get.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import tmpsandbox.microarch.ddd.delivery.adapters.in.http.model.Courier;
-import tmpsandbox.microarch.ddd.delivery.core.application.queries.GetAllCouriersQueryResponse;
+import tmpsandbox.microarch.ddd.delivery.core.application.query.GetAllCouriersQueryResponse;
 
 import java.util.List;
 

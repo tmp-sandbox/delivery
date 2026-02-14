@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 import tmpsandbox.microarch.ddd.delivery.core.domain.service.OrderDispatcher;
-import tmpsandbox.microarch.ddd.delivery.core.ports.CourierRepository;
-import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
+import tmpsandbox.microarch.ddd.delivery.core.port.CourierRepository;
+import tmpsandbox.microarch.ddd.delivery.core.port.OrderRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,10 +49,15 @@ public class OrderDispatcherCommandHandler {
             return UnitResult.failure(Error.of("orderByStatusCreated", "Cant find a free order for the courier"));
         }
 
-        Courier dispatchedCourier = orderDispatcher.dispatch(unassignedOrder.get(), freeCouriers);
+        var dispatchedCourier = orderDispatcher.dispatch(unassignedOrder.get(), freeCouriers);
+
+        if (dispatchedCourier.isEmpty()) {
+            log.info("Cannot dispatch courier");
+            return UnitResult.success();
+        }
 
         orderRepository.save(unassignedOrder.get());
-        courierRepository.save(dispatchedCourier);
+        courierRepository.save(dispatchedCourier.get());
 
         return UnitResult.success();
     }

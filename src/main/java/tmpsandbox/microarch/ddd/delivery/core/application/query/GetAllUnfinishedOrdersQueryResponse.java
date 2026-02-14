@@ -1,4 +1,4 @@
-package tmpsandbox.microarch.ddd.delivery.core.application.queries;
+package tmpsandbox.microarch.ddd.delivery.core.application.query;
 
 import java.util.UUID;
 

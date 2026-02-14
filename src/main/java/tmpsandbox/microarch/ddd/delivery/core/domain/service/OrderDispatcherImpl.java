@@ -1,5 +1,7 @@
 package tmpsandbox.microarch.ddd.delivery.core.domain.service;
 
+import libs.errs.Error;
+import libs.errs.Result;
 import org.springframework.stereotype.Service;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
@@ -7,6 +9,7 @@ import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.OrderStatus;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderDispatcherImpl implements OrderDispatcher {
@@ -31,26 +34,33 @@ public class OrderDispatcherImpl implements OrderDispatcher {
         Курьер начинает доставку из его текущего Location и завершает в Location заказа
     * */
     @Override
-    public Courier dispatch(Order order, List<Courier> couriers) {
+    public Optional<Courier> dispatch(Order order, List<Courier> couriers) {
         if (order.getStatus() != OrderStatus.CREATED) {
             throw new IllegalArgumentException("Order status is not CREATED");
         }
 
         if (couriers.isEmpty()) {
-            return null;
+            return Optional.empty();
         }
 
         List<Courier> couriersCanTakeOrder = couriers.stream()
-                .filter(courier -> courier.canTakeOrder(order).getValue())
-                .toList();
+            .filter(courier -> {
+                var result = courier.canTakeOrder(order);
+                if (result.isFailure()) {
+                    return false;
+                }
+
+                return result.getValue();
+            })
+            .toList();
 
         return couriersCanTakeOrder.stream()
                 .min(Comparator.comparing(courier -> courier.calculateTimeToLocation(order.getLocation()).getValue()))
                 .map(courier -> {
                     courier.takeOrder(order);
                     order.assign(courier);
-                    return courier;
+                    return Optional.of(courier);
                 })
-                .orElse(null);
+                .orElse(Optional.empty());
     }
 }

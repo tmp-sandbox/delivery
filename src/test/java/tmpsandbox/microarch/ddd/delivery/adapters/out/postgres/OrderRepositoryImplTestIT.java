@@ -4,7 +4,7 @@ import libs.ddd.BaseEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import tmpsandbox.microarch.ddd.delivery.core.domain.BaseIT;
+import tmpsandbox.microarch.ddd.delivery.BaseIT;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
@@ -12,7 +12,7 @@ import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Name;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Speed;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.OrderStatus;
-import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
+import tmpsandbox.microarch.ddd.delivery.core.port.OrderRepository;
 
 import java.util.List;
 import java.util.Map;

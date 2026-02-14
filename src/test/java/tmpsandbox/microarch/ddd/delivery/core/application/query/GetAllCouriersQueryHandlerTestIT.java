@@ -1,9 +1,9 @@
-package tmpsandbox.microarch.ddd.delivery.core.application.queries;
+package tmpsandbox.microarch.ddd.delivery.core.application.query;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import tmpsandbox.microarch.ddd.delivery.adapters.out.postgres.CourierJpaRepository;
-import tmpsandbox.microarch.ddd.delivery.core.domain.BaseIT;
+import tmpsandbox.microarch.ddd.delivery.BaseIT;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Name;

@@ -12,7 +12,7 @@ import tmpsandbox.microarch.ddd.delivery.core.application.command.courier.MoveCo
 public class MoveCourierScheduler {
     private final MoveCourierCommandHandler handler;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelayString = "${schedule.order.move-delay}")
     public void move() {
         log.info("Start moving");
         handler.handle();

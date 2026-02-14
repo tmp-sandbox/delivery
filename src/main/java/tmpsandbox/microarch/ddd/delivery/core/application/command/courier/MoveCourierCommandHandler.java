@@ -3,10 +3,12 @@ package tmpsandbox.microarch.ddd.delivery.core.application.command.courier;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tmpsandbox.microarch.ddd.delivery.common.event.DomainEventPublisher;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
-import tmpsandbox.microarch.ddd.delivery.core.ports.CourierRepository;
-import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
+import tmpsandbox.microarch.ddd.delivery.core.domain.service.OrderCompletionOnArrivalService;
+import tmpsandbox.microarch.ddd.delivery.core.port.CourierRepository;
+import tmpsandbox.microarch.ddd.delivery.core.port.OrderRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,8 @@ import java.util.UUID;
 public class MoveCourierCommandHandler {
     private final CourierRepository courierRepositoryImpl;
     private final OrderRepository orderRepositoryImpl;
+    private final OrderCompletionOnArrivalService orderCompletionOnArrivalService;
+    private final DomainEventPublisher domainEventPublisher;
 
     public void handle() {
         List<Courier> busyCouriers = courierRepositoryImpl.findBusy();
@@ -52,7 +56,15 @@ public class MoveCourierCommandHandler {
             return;
         }
 
-        busyCouriers.forEach(courier -> courier.move(ordersById.get(courier.getOrderId().get()).getLocation()));
-        busyCouriers.forEach(courierRepositoryImpl::save);
+        busyCouriers.forEach(courier -> moveAndSave(courier, ordersById.get(courier.getOrderId().get())));
+    }
+
+    private void moveAndSave(Courier courier, Order order) {
+        orderCompletionOnArrivalService.moveAndCompleteIfArrived(courier, order);
+
+        courierRepositoryImpl.save(courier);
+        orderRepositoryImpl.save(order);
+
+        domainEventPublisher.publish(List.of(order));
     }
 }

@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.event.OrderCompletedEvent;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.event.OrderCreatedEvent;
 
 import java.util.UUID;
 
@@ -44,6 +46,8 @@ public class Order extends Aggregate<UUID> {
         this.volume = volume;
         this.location = location;
         this.status = OrderStatus.CREATED;
+
+        raiseDomainEvent(new OrderCreatedEvent(this));
     }
 
     private Order(UUID id, Location location, Volume volume, UUID courierId) {
@@ -52,6 +56,8 @@ public class Order extends Aggregate<UUID> {
         this.location = location;
         this.courierId = courierId;
         this.status = OrderStatus.CREATED;
+
+        raiseDomainEvent(new OrderCreatedEvent(this));
     }
 
     public static Result<Order, Error> create(UUID id, Location location, Volume volume) {
@@ -87,6 +93,7 @@ public class Order extends Aggregate<UUID> {
 
         status = OrderStatus.COMPLETED;
 
+        raiseDomainEvent(new OrderCompletedEvent(this));
         return UnitResult.success();
     }
 }

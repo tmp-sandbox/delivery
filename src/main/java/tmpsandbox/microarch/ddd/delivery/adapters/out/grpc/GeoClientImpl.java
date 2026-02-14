@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
-import tmpsandbox.microarch.ddd.delivery.core.ports.GeoClient;
+import tmpsandbox.microarch.ddd.delivery.core.port.GeoClient;
 
 @Service
 @Slf4j
