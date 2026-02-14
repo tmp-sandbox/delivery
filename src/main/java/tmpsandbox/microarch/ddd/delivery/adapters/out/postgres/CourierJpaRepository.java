@@ -30,6 +30,7 @@ public interface CourierJpaRepository extends JpaRepository<Courier, UUID> {
     @Query("""
         SELECT c
         FROM Courier c
+        JOIN FETCH c.storagePlaces sp
         WHERE EXISTS (
             SELECT 1
             FROM StoragePlace sp

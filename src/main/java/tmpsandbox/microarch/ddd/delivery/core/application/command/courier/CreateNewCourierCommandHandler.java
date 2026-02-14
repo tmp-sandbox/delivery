@@ -2,14 +2,13 @@ package tmpsandbox.microarch.ddd.delivery.core.application.command.courier;
 
 import libs.errs.Error;
 import libs.errs.Result;
-import libs.errs.UnitResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Name;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Speed;
-import tmpsandbox.microarch.ddd.delivery.core.ports.CourierRepository;
+import tmpsandbox.microarch.ddd.delivery.core.port.CourierRepository;
 
 import java.util.UUID;
 

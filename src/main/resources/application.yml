@@ -23,10 +23,17 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
       value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
 
-
-
 grpc:
   client:
     geo:
       address: static://localhost:5004
       negotiation-type: plaintext
+
+kafka:
+  orders:
+    events-topic: orders.events
+
+schedule:
+  order:
+    move-delay: 5000
+    dispatch-delay: 5000

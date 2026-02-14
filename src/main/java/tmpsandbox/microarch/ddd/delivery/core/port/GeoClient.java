@@ -1,4 +1,4 @@
-package tmpsandbox.microarch.ddd.delivery.core.ports;
+package tmpsandbox.microarch.ddd.delivery.core.port;
 
 import libs.errs.Error;
 import libs.errs.Result;

@@ -5,7 +5,7 @@ import libs.errs.UnitResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
-import tmpsandbox.microarch.ddd.delivery.core.ports.CourierRepository;
+import tmpsandbox.microarch.ddd.delivery.core.port.CourierRepository;
 
 import java.util.Optional;
 

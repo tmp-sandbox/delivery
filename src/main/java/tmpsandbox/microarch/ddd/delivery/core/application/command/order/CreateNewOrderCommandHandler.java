@@ -5,12 +5,14 @@ import libs.errs.Result;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tmpsandbox.microarch.ddd.delivery.common.event.DomainEventPublisher;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
-import tmpsandbox.microarch.ddd.delivery.core.ports.GeoClient;
-import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
+import tmpsandbox.microarch.ddd.delivery.core.port.GeoClient;
+import tmpsandbox.microarch.ddd.delivery.core.port.OrderRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 /*
@@ -32,6 +34,7 @@ import java.util.UUID;
 public class CreateNewOrderCommandHandler {
     private final OrderRepository orderRepository;
     private final GeoClient geoClient;
+    private final DomainEventPublisher domainEventPublisher;
 
     public Result<UUID, Error> handle(CreateNewOrderCommand createNewOrderCommand) {
         Result<Location, Error> locationResponse = geoClient.getLocation(createNewOrderCommand.street());
@@ -53,6 +56,8 @@ public class CreateNewOrderCommandHandler {
         orderRepository.save(orderResult.getValue());
 
         log.info("Created new order: {}", orderResult.getValue().getId());
+
+        domainEventPublisher.publish(List.of(orderResult.getValue()));
         return Result.success(orderResult.getValue().getId());
     }
 }

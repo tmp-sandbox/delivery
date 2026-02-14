@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.OrderStatus;
-import tmpsandbox.microarch.ddd.delivery.core.ports.OrderRepository;
+import tmpsandbox.microarch.ddd.delivery.core.port.OrderRepository;
 
 import java.util.List;
 import java.util.Map;

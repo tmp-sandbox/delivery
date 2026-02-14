@@ -3,7 +3,7 @@ package tmpsandbox.microarch.ddd.delivery.adapters.out.postgres;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
-import tmpsandbox.microarch.ddd.delivery.core.ports.CourierRepository;
+import tmpsandbox.microarch.ddd.delivery.core.port.CourierRepository;
 
 import java.util.List;
 import java.util.Optional;

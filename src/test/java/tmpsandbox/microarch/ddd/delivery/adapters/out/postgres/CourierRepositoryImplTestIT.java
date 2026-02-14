@@ -4,14 +4,14 @@ package tmpsandbox.microarch.ddd.delivery.adapters.out.postgres;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import tmpsandbox.microarch.ddd.delivery.core.domain.BaseIT;
+import tmpsandbox.microarch.ddd.delivery.BaseIT;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Name;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Speed;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
-import tmpsandbox.microarch.ddd.delivery.core.ports.CourierRepository;
+import tmpsandbox.microarch.ddd.delivery.core.port.CourierRepository;
 
 import java.util.List;
 import java.util.UUID;
