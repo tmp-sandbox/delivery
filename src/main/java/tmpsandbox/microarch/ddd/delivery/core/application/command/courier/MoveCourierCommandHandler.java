@@ -1,9 +1,10 @@
 package tmpsandbox.microarch.ddd.delivery.core.application.command.courier;
 
+import jakarta.transaction.Transactional;
+import libs.ddd.DomainEventPublisher;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tmpsandbox.microarch.ddd.delivery.common.event.DomainEventPublisher;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 import tmpsandbox.microarch.ddd.delivery.core.domain.service.OrderCompletionOnArrivalService;
@@ -35,6 +36,7 @@ public class MoveCourierCommandHandler {
     private final OrderCompletionOnArrivalService orderCompletionOnArrivalService;
     private final DomainEventPublisher domainEventPublisher;
 
+    @Transactional
     public void handle() {
         List<Courier> busyCouriers = courierRepositoryImpl.findBusy();
 

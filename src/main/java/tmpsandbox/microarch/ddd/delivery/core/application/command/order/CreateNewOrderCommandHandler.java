@@ -1,11 +1,12 @@
 package tmpsandbox.microarch.ddd.delivery.core.application.command.order;
 
+import jakarta.transaction.Transactional;
+import libs.ddd.DomainEventPublisher;
 import libs.errs.Error;
 import libs.errs.Result;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tmpsandbox.microarch.ddd.delivery.common.event.DomainEventPublisher;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
@@ -36,6 +37,7 @@ public class CreateNewOrderCommandHandler {
     private final GeoClient geoClient;
     private final DomainEventPublisher domainEventPublisher;
 
+    @Transactional
     public Result<UUID, Error> handle(CreateNewOrderCommand createNewOrderCommand) {
         Result<Location, Error> locationResponse = geoClient.getLocation(createNewOrderCommand.street());
 
