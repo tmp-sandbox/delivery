@@ -16,6 +16,7 @@ import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Name;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Speed;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Status;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(MockitoExtension.class)
 class OrderDispatcherImplTest {
@@ -81,7 +83,10 @@ class OrderDispatcherImplTest {
         Courier dispatchedCourier = orderDispatcher.dispatch(order, couriers);
 
         // Then:
-        assertThat(dispatchedCourier).isEqualTo(winner);
+        assertAll(
+            () -> assertThat(dispatchedCourier).isEqualTo(winner),
+            () -> assertThat(order.getStatus()).isEqualTo(Status.ASSIGNED)
+        );
     }
 
     @Test

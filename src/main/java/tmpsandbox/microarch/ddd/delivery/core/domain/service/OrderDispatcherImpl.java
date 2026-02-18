@@ -48,6 +48,7 @@ public class OrderDispatcherImpl implements OrderDispatcher {
                 .min(Comparator.comparing(courier -> courier.calculateTimeToLocation(order.getLocation()).getValue()))
                 .map(courier -> {
                     courier.takeOrder(order);
+                    order.assign(courier);
                     return courier;
                 })
                 .orElse(null);
