@@ -1,5 +1,12 @@
 package tmpsandbox.microarch.ddd.delivery.core.domain.model.order;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import libs.ddd.Aggregate;
 import libs.errs.Except;
 import libs.errs.Result;
@@ -7,19 +14,26 @@ import libs.errs.UnitResult;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
 
 import java.util.UUID;
 
+@Entity
+@Table(name = "orders")
 @NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 @Getter
 public class Order extends Aggregate<UUID> {
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "location"))
     private Location location;
 
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "volume"))
     private Volume volume;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     private UUID courierId;

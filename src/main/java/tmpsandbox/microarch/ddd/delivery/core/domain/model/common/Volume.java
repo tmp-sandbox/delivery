@@ -1,20 +1,23 @@
 package tmpsandbox.microarch.ddd.delivery.core.domain.model.common;
 
+import jakarta.persistence.Embeddable;
 import libs.ddd.ValueObject;
 import libs.errs.Err;
 import libs.errs.Error;
 import libs.errs.Result;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Embeddable
 @Getter
-public final class Volume extends ValueObject<Volume> {
-    private final int value;
-
-    private Volume(int value) {
-        this.value = value;
-    }
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class Volume extends ValueObject<Volume> {
+    private int value;
 
     public static Result<Volume, Error> create(int value) {
         var validation = Err.againstZeroOrNegative(value, "totalValue");
