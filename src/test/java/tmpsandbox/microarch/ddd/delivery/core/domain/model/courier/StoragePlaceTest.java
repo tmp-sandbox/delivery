@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -25,23 +23,6 @@ class StoragePlaceTest {
                 () -> assertThat(storagePlace.getName()).isEqualTo(BACKPACK),
                 () -> assertThat(storagePlace.getTotalVolume()).isEqualTo(BACKPACK_CAPACITY),
                 () -> assertThat(storagePlace.getStatus()).isEqualTo(Status.EMPTY)
-        );
-    }
-
-    @Test
-    public void shouldCreateStoragePlace_whenDataCorrectWithOrder() {
-        // Given:
-        var orderId = UUID.randomUUID();
-
-        // When:
-        var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY, orderId).getValue();
-
-        // Then:
-        assertAll(
-                () -> assertThat(storagePlace.getName()).isEqualTo(BACKPACK),
-                () -> assertThat(storagePlace.getTotalVolume()).isEqualTo(BACKPACK_CAPACITY),
-                () -> assertThat(storagePlace.getStatus()).isEqualTo(Status.BUSY),
-                () -> assertThat(storagePlace.getOrderId()).isEqualTo(orderId)
         );
     }
 
@@ -75,23 +56,6 @@ class StoragePlaceTest {
     }
 
     @Test
-    public void shouldReturnOrderAndResetState_whenGetOrder() {
-        // Given:
-        var expectedOrderId = UUID.randomUUID();
-        var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY, expectedOrderId).getValue();
-
-        // When:
-        UUID orderId = storagePlace.getOrderId();
-
-        // Then:
-        assertAll(
-                () -> assertThat(orderId).isEqualTo(expectedOrderId),
-                () -> assertThat(storagePlace.getStatus()).isEqualTo(Status.EMPTY),
-                () -> assertThat(storagePlace.getOrderId()).isNull()
-        );
-    }
-
-    @Test
     public void shouldReturnTrue_whenStoreIsEmpty() {
         // Given:
         var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY).getValue();
@@ -104,18 +68,6 @@ class StoragePlaceTest {
     }
 
     @Test
-    public void shouldReturnFalse_whenStoreIsBusy() {
-        // Given:
-        var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY, UUID.randomUUID()).getValue();
-
-        // When:
-        boolean isOccupied = storagePlace.isOccupied();
-
-        // Then:
-        assertThat(isOccupied).isFalse();
-    }
-
-    @Test
     public void shouldStoreOrder_whenCallStore() {
         // Given:
         var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY).getValue();
@@ -125,19 +77,7 @@ class StoragePlaceTest {
         storagePlace.storeOrder(order);
 
         // Then:
-        assertThat(storagePlace.getOrderId()).isEqualTo(order.getId());
-    }
-
-    @Test
-    public void shouldNotStoreOrder_whenStoreBusy() {
-        // Given:
-        var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY, UUID.randomUUID()).getValue();
-        var order = Order.create(BACKPACK_CAPACITY).getValue();
-
-        // When, Then:
-        assertThatThrownBy(() -> storagePlace.storeOrder(order))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("Cannot store order while the storage place is busy");
+        assertThat(storagePlace.takeOrder()).isEqualTo(order.getId());
     }
 
     @Test
@@ -146,10 +86,12 @@ class StoragePlaceTest {
         var storagePlace = StoragePlace.create(BACKPACK, BACKPACK_CAPACITY).getValue();
         var order = Order.create(Volume.create(2).getValue()).getValue();
 
-        // When, Then:
-        assertThatThrownBy(() -> storagePlace.storeOrder(order))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("Cannot store order while the storage place is over the total volume");
-    }
+        // When:
+        var result = storagePlace.storeOrder(order);
 
+        // Then:
+        assertThat(result.isFailure()).isTrue();
+        assertThat(result.getError().getCode()).isEqualTo("volume");
+        assertThat(result.getError().getMessage()).isEqualTo("Cannot store order while the storage place is over the total volume");
+    }
 }

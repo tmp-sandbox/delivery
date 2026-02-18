@@ -3,6 +3,8 @@ package tmpsandbox.microarch.ddd.delivery.core.domain.model.courier;
 import libs.ddd.BaseEntity;
 import libs.errs.Except;
 import libs.errs.Result;
+import libs.errs.UnitResult;
+import libs.errs.Error;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,15 +34,6 @@ public class StoragePlace extends BaseEntity<UUID> {
         this.status = Status.EMPTY;
     }
 
-    private StoragePlace(Name name, Volume totalVolume, UUID orderId) {
-        super(UUID.randomUUID());
-        this.name = name;
-        this.totalVolume = totalVolume;
-        this.orderId = orderId;
-        this.status = Status.BUSY;
-    }
-
-
     public static Result<StoragePlace, Error> create(Name name, Volume totalVolume) {
         Except.againstNull(name, "name");
         Except.againstNull(totalVolume, "totalVolume");
@@ -48,15 +41,7 @@ public class StoragePlace extends BaseEntity<UUID> {
         return Result.success(new StoragePlace(name, totalVolume));
     }
 
-    public static Result<StoragePlace, Error> create(Name name, Volume totalVolume, UUID orderId) {
-        Except.againstNull(name, "name");
-        Except.againstNull(totalVolume, "totalVolume");
-        Except.againstNull(orderId, "orderId");
-
-        return Result.success(new StoragePlace(name, totalVolume, orderId));
-    }
-
-    public UUID getOrderId() {
+    public UUID takeOrder() {
         UUID orderId = this.orderId;
 
         this.orderId = null;
@@ -69,16 +54,17 @@ public class StoragePlace extends BaseEntity<UUID> {
         return status == Status.EMPTY;
     }
 
-    public void storeOrder(Order order) {
-        if (status == Status.BUSY) {
-            throw new IllegalStateException("Cannot store order while the storage place is busy");
+    public UnitResult<Error> storeOrder(Order order) {
+        if (status == Status.OCCUPIED) {
+            return UnitResult.failure(Error.of("status", "Cannot store order while the storage place is occupied"));
         }
 
         if (order.getVolume().isGreaterThan(totalVolume)) {
-            throw new IllegalStateException("Cannot store order while the storage place is over the total volume");
+            return UnitResult.failure(Error.of("volume", "Cannot store order while the storage place is over the total volume"));
         }
 
         orderId = order.getId();
-        status = Status.BUSY;
+        status = Status.OCCUPIED;
+        return UnitResult.success();
     }
 }
