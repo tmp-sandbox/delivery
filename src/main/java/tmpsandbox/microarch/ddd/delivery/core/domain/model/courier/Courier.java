@@ -48,7 +48,17 @@ public class Courier extends Aggregate<UUID> {
     }
 
     public UnitResult<Error> addStoragePlace(String name, int volume) {
-        Result<StoragePlace, Error> storagePlaceResult = StoragePlace.create(Name.create(name).getValue(), Volume.create(volume).getValue());
+        var nameResult = Name.create(name);
+        if (nameResult.isFailure()) {
+            return UnitResult.failure(nameResult.getError());
+        }
+
+        var volumeResult = Volume.create(volume);
+        if (volumeResult.isFailure()) {
+            return UnitResult.failure(volumeResult.getError());
+        }
+
+        Result<StoragePlace, Error> storagePlaceResult = StoragePlace.create(nameResult.getValue(), volumeResult.getValue());
 
         if (storagePlaceResult.isFailure()) {
             return UnitResult.failure(storagePlaceResult.getError());

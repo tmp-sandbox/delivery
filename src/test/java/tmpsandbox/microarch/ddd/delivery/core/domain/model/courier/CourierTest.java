@@ -1,9 +1,5 @@
 package tmpsandbox.microarch.ddd.delivery.core.domain.model.courier;
 
-
-import libs.errs.Error;
-import libs.errs.UnitResult;
-import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.kernel.Location;
@@ -62,6 +58,36 @@ class CourierTest {
         assertThat(courier.getStoragePlaces()).anyMatch(storagePlace ->
                 storagePlace.getName().equals(Name.create(nameStorage).getValue()) &&
                         storagePlace.getTotalVolume().equals(Volume.create(volume).getValue()));
+    }
+
+    @Test
+    public void shouldCreateWithError_whenNameStorageIsBlank() {
+        // Given:
+        var courier = getCourier();
+
+        String nameStorage = "";
+        int volume = 100;
+
+        // When:
+        var result = courier.addStoragePlace(nameStorage, volume);
+
+        // Then:
+        assertThat(result.isFailure()).isTrue();
+    }
+
+    @Test
+    public void shouldCreateWithError_whenVolumeStorageIsZero() {
+        // Given:
+        var courier = getCourier();
+
+        String nameStorage = "test";
+        int volume = 0;
+
+        // When:
+        var result = courier.addStoragePlace(nameStorage, volume);
+
+        // Then:
+        assertThat(result.isFailure()).isTrue();
     }
 
     private static Courier getCourier() {
