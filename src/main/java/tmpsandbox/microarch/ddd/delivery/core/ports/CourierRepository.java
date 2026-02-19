@@ -12,4 +12,6 @@ public interface CourierRepository {
     Optional<Courier> findById(UUID id);
 
     List<Courier> findFree();
+
+    List<Courier> findBusy();
 }

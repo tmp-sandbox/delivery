@@ -21,6 +21,7 @@ import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -68,6 +69,13 @@ public class Courier extends Aggregate<UUID> {
 
         Courier courier = new Courier(name, speed, location);
         return Result.success(courier);
+    }
+
+    public Optional<UUID> getOrderId() {
+        return storagePlaces.stream()
+            .map(StoragePlace::getOrderId)
+            .filter(Objects::nonNull)
+            .findFirst();
     }
 
     public UnitResult<Error> addStoragePlace(String name, int volume) {
@@ -142,7 +150,7 @@ public class Courier extends Aggregate<UUID> {
         return Result.success(speed.timeForDistance(distanceResult.getValue()));
     }
 
-    // Курьер может переместиться на один шаг в сторону Location заказа. При этом его Location меняется. Возьмите алгоритм из примера
+    // Курьер может переместиться на один шаг в сторону Location заказа. При этом его Location меняется. Возьмите алгоритм из примера
     public UnitResult<Error> move(Location target) {
         if (target == null) {
             return UnitResult.failure(Error.of("target", "value is required"));

@@ -61,6 +61,8 @@ class CourierRepositoryImplTestIT extends BaseIT {
         // Given:
         courierRepositoryImpl.save(createFreeCourier());
         courierRepositoryImpl.save(createFreeCourier());
+        courierRepositoryImpl.save(createFreeCourier());
+        courierRepositoryImpl.save(createFreeCourier());
 
         courierRepositoryImpl.save(createBusyCourier());
 
@@ -68,7 +70,26 @@ class CourierRepositoryImplTestIT extends BaseIT {
         List<Courier> freeCouriers = courierRepositoryImpl.findFree();
 
         // Then:
-        assertThat(freeCouriers).hasSize(2);
+        assertThat(freeCouriers).hasSize(4);
+    }
+
+    @Test
+    void shouldFindAllBusyCouriers_whenFindBusy() {
+        // Given:
+        courierRepositoryImpl.save(createFreeCourier());
+        courierRepositoryImpl.save(createFreeCourier());
+
+        courierRepositoryImpl.save(createBusyCourier());
+        courierRepositoryImpl.save(createBusyCourier());
+        courierRepositoryImpl.save(createBusyCourier());
+        courierRepositoryImpl.save(createBusyCourier());
+        courierRepositoryImpl.save(createBusyCourier());
+
+        // When:
+        List<Courier> busyCouriers = courierRepositoryImpl.findBusy();
+
+        // Then:
+        assertThat(busyCouriers).hasSize(5);
     }
 
     private static Courier createFreeCourier() {
