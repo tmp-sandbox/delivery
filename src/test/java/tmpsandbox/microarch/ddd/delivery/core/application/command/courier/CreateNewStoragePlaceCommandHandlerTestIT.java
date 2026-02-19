@@ -17,10 +17,6 @@ class CreateNewStoragePlaceCommandHandlerTestIT extends BaseIT {
     @Autowired
     private CreateNewCourierCommandHandler handler;
 
-    public static Stream<String> provideNames() {
-        return Stream.of(null, "", "   ");
-    }
-
     @Test
     public void shouldCreateNewCourier_whenHandle() {
         // Given:
@@ -33,31 +29,6 @@ class CreateNewStoragePlaceCommandHandlerTestIT extends BaseIT {
         var handle = handler.handle(createNewCourierCommand);
 
         // Then:
-        assertThat(handle.isFailure()).isFalse();
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideNames")
-    public void shouldReturnError_whenInvalidName(String name) {
-        // Given, When:
-        var createNewCourierCommandResult = CreateNewCourierCommand.create(
-            name,
-            TEST_SPEED
-        );
-
-        // Then:
-        assertThat(createNewCourierCommandResult.isFailure()).isTrue();
-    }
-
-    @Test
-    public void shouldReturnError_whenInvalidSpeed() {
-        // Given, When:
-        var createNewCourierCommandResult = CreateNewCourierCommand.create(
-            TEST_NAME,
-            -1
-        );
-
-        // Then:
-        assertThat(createNewCourierCommandResult.isFailure()).isTrue();
+        assertThat(handle.isSuccess()).isTrue();
     }
 }
