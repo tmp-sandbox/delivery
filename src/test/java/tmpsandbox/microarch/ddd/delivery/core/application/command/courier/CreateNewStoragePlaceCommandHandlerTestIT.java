@@ -24,10 +24,10 @@ class CreateNewStoragePlaceCommandHandlerTestIT extends BaseIT {
     @Test
     public void shouldCreateNewCourier_whenHandle() {
         // Given:
-        CreateNewCourierCommand createNewCourierCommand = new CreateNewCourierCommand(
+        CreateNewCourierCommand createNewCourierCommand = CreateNewCourierCommand.create(
             TEST_NAME,
             TEST_SPEED
-        );
+        ).getValue();
 
         // When:
         var handle = handler.handle(createNewCourierCommand);
@@ -39,31 +39,25 @@ class CreateNewStoragePlaceCommandHandlerTestIT extends BaseIT {
     @ParameterizedTest
     @MethodSource("provideNames")
     public void shouldReturnError_whenInvalidName(String name) {
-        // Given:
-        CreateNewCourierCommand createNewCourierCommand = new CreateNewCourierCommand(
+        // Given, When:
+        var createNewCourierCommandResult = CreateNewCourierCommand.create(
             name,
             TEST_SPEED
         );
 
-        // When:
-        var handle = handler.handle(createNewCourierCommand);
-
         // Then:
-        assertThat(handle.isFailure()).isTrue();
+        assertThat(createNewCourierCommandResult.isFailure()).isTrue();
     }
 
     @Test
     public void shouldReturnError_whenInvalidSpeed() {
-        // Given:
-        CreateNewCourierCommand createNewCourierCommand = new CreateNewCourierCommand(
+        // Given, When:
+        var createNewCourierCommandResult = CreateNewCourierCommand.create(
             TEST_NAME,
             -1
         );
 
-        // When:
-        var handle = handler.handle(createNewCourierCommand);
-
         // Then:
-        assertThat(handle.isFailure()).isTrue();
+        assertThat(createNewCourierCommandResult.isFailure()).isTrue();
     }
 }

@@ -30,10 +30,10 @@ class CreateNewCourierCommandCommandHandlerTestIT extends BaseIT {
     @Test
     public void shouldCreateNewCourier_whenHandle() {
         // Given:
-        var createNewCourierCommand = new CreateNewCourierCommand(TEST_NAME, TEST_SPEED);
+        var createNewCourierCommand = CreateNewCourierCommand.create(TEST_NAME, TEST_SPEED);
 
         // When:
-        var result = handler.handle(createNewCourierCommand);
+        var result = handler.handle(createNewCourierCommand.getValue());
 
         // Then:
         List<Courier> allCouriers = courierJpaRepository.findAll();

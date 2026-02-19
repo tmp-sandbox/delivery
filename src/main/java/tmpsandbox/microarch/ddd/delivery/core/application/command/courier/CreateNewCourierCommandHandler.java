@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Name;
-import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Speed;
 import tmpsandbox.microarch.ddd.delivery.core.ports.CourierRepository;
 
 /*
@@ -23,19 +21,7 @@ public class CreateNewCourierCommandHandler {
 
     public UnitResult<Error> handle(CreateNewCourierCommand commandDto) {
         var defaultLocation = Location.create(1, 1).getValue();
-
-        var nameResult = Name.create(commandDto.name());
-        var speedResult = Speed.create(commandDto.speed());
-
-        if (nameResult.isFailure()) {
-            return UnitResult.failure(nameResult.getError());
-        }
-
-        if (speedResult.isFailure()) {
-            return UnitResult.failure(speedResult.getError());
-        }
-
-        var courierResult = Courier.create(nameResult.getValue(), speedResult.getValue(), defaultLocation);
+        var courierResult = Courier.create(commandDto.name(), commandDto.speed(), defaultLocation);
 
         if (courierResult.isFailure()) {
             return UnitResult.failure(courierResult.getError());

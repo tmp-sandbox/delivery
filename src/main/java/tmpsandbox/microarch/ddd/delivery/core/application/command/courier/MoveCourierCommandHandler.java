@@ -1,5 +1,6 @@
 package tmpsandbox.microarch.ddd.delivery.core.application.command.courier;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.courier.Courier;
@@ -29,6 +30,7 @@ public class MoveCourierCommandHandler {
     private final CourierRepository courierRepositoryImpl;
     private final OrderRepository orderRepositoryImpl;
 
+    @Transactional
     public void handler() {
         List<Courier> busyCouriers = courierRepositoryImpl.findBusy();
 
