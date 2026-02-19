@@ -14,3 +14,10 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+grpc:
+  client:
+    geo:
+      address: localhost:9090
+      negotiation-type: plaintext
