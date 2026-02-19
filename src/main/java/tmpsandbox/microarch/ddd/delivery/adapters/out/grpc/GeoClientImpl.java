@@ -27,10 +27,6 @@ public class GeoClientImpl implements GeoClient {
         var geolocation = geoBlockingStub.getGeolocation(geoLocationRequest);
         log.debug("Response geo service: {}", geolocation);
 
-        return mapToResponse(geolocation);
-    }
-
-    private Result<Location, Error> mapToResponse(GeoProto.GetGeolocationReply response) {
-        return Location.create(response.getLocation().getX(), response.getLocation().getY());
+        return Location.create(geolocation.getLocation().getX(), geolocation.getLocation().getY());
     }
 }

@@ -43,9 +43,12 @@ public class CreateNewOrderCommandHandler {
             return Result.failure(Error.of("GeoClient", error));
         }
 
-        var location = Location.create(1, 1).getValue();
+        Result<Order, Error> orderResult = Order.create(
+            createNewOrderCommand.orderId(),
+            locationResponse.getValue(),
+            Volume.create(createNewOrderCommand.volume()).getValue()
+        );
 
-        Result<Order, Error> orderResult = Order.create(createNewOrderCommand.orderId(), location, Volume.create(createNewOrderCommand.volume()).getValue());
         if (orderResult.isFailure()) {
             return Result.failure(orderResult.getError());
         }
