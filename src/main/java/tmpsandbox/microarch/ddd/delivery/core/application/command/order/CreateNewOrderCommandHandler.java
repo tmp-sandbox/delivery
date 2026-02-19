@@ -30,7 +30,7 @@ public class CreateNewOrderCommandHandler {
     public UnitResult<Error> handle(CreateNewOrderCommand createNewOrderCommand) {
         var location = Location.create(1, 1).getValue();
 
-        Result<Order, Error> orderResult = Order.create(createNewOrderCommand.orderId(), location, Volume.create(createNewOrderCommand.volume()).getValue());
+        Result<Order, Error> orderResult = Order.create(createNewOrderCommand.orderId(), location, createNewOrderCommand.volume());
         if (orderResult.isFailure()) {
             return UnitResult.failure(orderResult.getError());
         }

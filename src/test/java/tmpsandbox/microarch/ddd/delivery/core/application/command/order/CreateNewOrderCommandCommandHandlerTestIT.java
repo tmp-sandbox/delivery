@@ -27,7 +27,7 @@ class CreateNewOrderCommandCommandHandlerTestIT extends BaseIT {
     @Test
     void shouldCreateNewOrder_whenCallHandle() {
         // Given:
-        var command = new CreateNewOrderCommand(UUID.randomUUID(), "street", 5);
+        var command = CreateNewOrderCommand.create(UUID.randomUUID(), "street", 5).getValue();
 
         // When:
         var result = handler.handle(command);
