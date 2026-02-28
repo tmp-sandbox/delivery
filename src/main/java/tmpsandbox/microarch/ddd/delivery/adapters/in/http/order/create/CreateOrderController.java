@@ -21,7 +21,21 @@ public class CreateOrderController implements CreateOrderApi {
 
     @Override
     public ResponseEntity<CreateOrderResponse> createOrder() {
-        var resultHandle = handler.handle(new CreateNewOrderCommand(UUID.randomUUID(), "street", 5));
+        var createNewOrderCommandResult = CreateNewOrderCommand.create(
+            UUID.randomUUID(),
+            "country",
+            "city",
+            "street",
+            "house",
+            "apartment",
+            5
+        );
+
+        if (createNewOrderCommandResult.isFailure()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        var resultHandle = handler.handle(createNewOrderCommandResult.getValue());
         if (resultHandle.isFailure()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

@@ -5,6 +5,7 @@ import libs.errs.Result;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Address;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Location;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.common.Volume;
 import tmpsandbox.microarch.ddd.delivery.core.domain.model.order.Order;
@@ -34,10 +35,11 @@ public class CreateNewOrderCommandHandler {
     private final GeoClient geoClient;
 
     public Result<UUID, Error> handle(CreateNewOrderCommand createNewOrderCommand) {
-        Result<Location, Error> locationResponse = geoClient.getLocation(createNewOrderCommand.street());
+        Address address = createNewOrderCommand.address();
+        Result<Location, Error> locationResponse = geoClient.getLocation(address.getStreet());
 
         if (locationResponse.isFailure()) {
-            String error = String.format("Failed to get location for street %s", createNewOrderCommand.street());
+            String error = String.format("Failed to get location for street %s", address.getStreet());
 
             log.error(error);
             return Result.failure(Error.of("GeoClient", error));
@@ -45,7 +47,7 @@ public class CreateNewOrderCommandHandler {
 
         var location = Location.create(1, 1).getValue();
 
-        Result<Order, Error> orderResult = Order.create(createNewOrderCommand.orderId(), location, Volume.create(createNewOrderCommand.volume()).getValue());
+        Result<Order, Error> orderResult = Order.create(createNewOrderCommand.orderId(), location, createNewOrderCommand.volume());
         if (orderResult.isFailure()) {
             return Result.failure(orderResult.getError());
         }
